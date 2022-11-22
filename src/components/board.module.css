@@ -43,3 +43,8 @@
 .addNode{
     text-transform: none !important;
 }
+
+.weight{
+    color : white !important;
+    margin-top: 2rem;
+}

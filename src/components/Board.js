@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import classes from "./board.module.css";
 import CytoscapeComponent from "react-cytoscapejs";
-import cytoscape from "cytoscape";
+import cytoscape, { use } from "cytoscape";
 import Toolbar from "./Toolbar";
 const Board = () => {
   const [node, setNode] = useState(0);
+  const [edge, setEdge] = useState(null);
+  let cyRef = useRef(null);
+  let weight = useRef(null);
   let nodePair = [];
   let myCyRef = useRef();
   const styles = [
@@ -26,7 +29,10 @@ const Board = () => {
     {
       selector: "edge",
       style: {
+        color: "white",
+        fontSize: 35,
         width: 5,
+        label: "data(label)",
         lineColor: "cyan",
       },
     },
@@ -53,9 +59,13 @@ const Board = () => {
         },
       },
     ]);
-    console.log(node);
 
     setNode((node) => node + 1);
+  };
+
+  const setWeightHandler = (w) => {
+    weight = w;
+    console.log(weight);
   };
   return (
     <div className={classes.board}>
@@ -63,20 +73,25 @@ const Board = () => {
       <div className={classes.wrapper}>
         <CytoscapeComponent
           cy={(cy) => {
+            cy.on("click", "edge", (e) => {
+              let edge = e.target;
+              cy.remove(edge);
+            });
             cy.on("click", "node", (e) => {
               var node_id = e.target.id();
-              console.log(node_id);
               nodePair.push(node_id);
-              if (nodePair.length == 2) {
+              if (nodePair.length == 2 && weight != null) {
                 cy.add({
                   group: "edges",
                   data: {
                     id: Math.random().toString(),
                     source: nodePair[0],
                     target: nodePair[1],
-                    label: 2,
+                    weight: weight,
+                    label: weight,
                   },
                 });
+                weight = null;
                 nodePair = [];
                 return;
               }
@@ -90,7 +105,10 @@ const Board = () => {
           })}
         />
         ;
-        <Toolbar addNodeHandler={addNodeHandler} />
+        <Toolbar
+          setWeightHandler={setWeightHandler}
+          addNodeHandler={addNodeHandler}
+        />
       </div>
     </div>
   );

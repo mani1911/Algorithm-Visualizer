@@ -1,7 +1,15 @@
-import React from "react";
-import Button from "@mui/material/Button";
+import React, { useState } from "react";
+import { Button, TextField } from "@mui/material";
 import classes from "./board.module.css";
-const Toolbar = ({ addNodeHandler }) => {
+import withStyles from "@mui/material";
+const Toolbar = ({ addNodeHandler, setWeightHandler }) => {
+  const [wei, setWei] = useState("");
+
+  const changeWeight = () => {
+    console.log(wei);
+    setWeightHandler(wei);
+    setWei("");
+  };
   return (
     <div className={classes.toolbar}>
       <h2>ToolBar</h2>
@@ -13,6 +21,18 @@ const Toolbar = ({ addNodeHandler }) => {
       >
         Add Node
       </Button>
+      <TextField
+        onChange={(e) => {
+          setWei(e.target.value);
+        }}
+        onBlur={changeWeight}
+        value={wei}
+        className={classes.weight}
+        id="outlined-basic"
+        label="Weight"
+        color="success"
+        variant="outlined"
+      />
     </div>
   );
 };
