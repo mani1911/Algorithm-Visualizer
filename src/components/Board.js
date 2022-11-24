@@ -10,6 +10,7 @@ const Board = () => {
   const [start, setStart] = useState(false);
   const [startInd, setStartInd] = useState(null);
   const [endInd, setEndInd] = useState(null);
+  const [del, setDel] = useState(false);
   let cyRef = useRef(null);
   let weight = useRef(null);
   let nodePair = [];
@@ -122,12 +123,24 @@ const Board = () => {
     return new Promise((resolve) => setTimeout(() => resolve(), ms));
   };
 
+  const deleteNodeHandler = () => {
+    setDel(true);
+  };
   return (
     <div className={classes.board}>
       <h1 className={`display-5 mt-3 text-light`}>Algorithm Visualizer</h1>
       <div className={classes.wrapper}>
         <CytoscapeComponent
           cy={(cy) => {
+            if (del) {
+              if (node > 0) {
+                cy.remove(cy.$(`#${node - 1}`));
+                console.log("Remoced : ", node - 1);
+                setDel(false);
+                console.log("All Deleted");
+                setNode((nod) => nod - 1);
+              }
+            }
             iterateCollections(cy.elements());
             if (start) {
               console.log(startInd, endInd);
@@ -166,6 +179,7 @@ const Board = () => {
           startDijkstraAlgo={startDijkstra}
           setWeightHandler={setWeightHandler}
           addNodeHandler={addNodeHandler}
+          deleteNodeHandler={deleteNodeHandler}
         />
       </div>
     </div> //comment
