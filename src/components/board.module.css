@@ -48,3 +48,13 @@
     color : white !important;
     margin-top: 2rem;
 }
+
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+
