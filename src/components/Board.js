@@ -162,6 +162,7 @@ const Board = () => {
               }
 
               delayedLoop();
+              setStart(false);
             }
 
             cy.on("click", "edge", (e) => addNode(e, cy));
